@@ -2,7 +2,7 @@ version: '3.9'
 services:
   frontend:
     build: ./frontend
-    container_name: app_frontend
+    # container_name: app_frontend
     ports: 
      - 3000:3000
     depends_on:
@@ -24,10 +24,8 @@ services:
         condition: service_healthy
     environment:
       - PORT=3001
-      # Os dados abaixo se referem ao container `db`
-      # Dica: Relembre aqui da comunicação interna entre containers
       - DB_USER=root
-      - DB_PASS=123456
+      - DB_PASS=Kd415263!
       - DB_HOST=db
       - DB_NAME=TRYBE_FUTEBOL_CLUBE
       - DB_PORT=3306

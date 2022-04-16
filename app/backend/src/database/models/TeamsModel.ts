@@ -1,16 +1,13 @@
 import { Model, INTEGER, STRING } from 'sequelize';
 import db from '.';
-// import OtherModel from './OtherModel';
 
 class Teams extends Model {
-  // public <campo>!: <tipo>;
   id!: number;
 
   teamName!: string;
 }
 
 Teams.init({
-  // ... Campos
   id: {
     type: INTEGER,
     allowNull: false,
@@ -22,10 +19,9 @@ Teams.init({
     allowNull: false,
   },
 }, {
-  // ... Outras configs
   underscored: true,
   sequelize: db,
-  // modelName: 'example',
+  modelName: 'Teams',
   timestamps: false,
 });
 /**

@@ -1,9 +1,7 @@
 import { Model, INTEGER, STRING } from 'sequelize';
 import db from '.';
-// import OtherModel from './OtherModel';
 
 class Users extends Model {
-  // public <campo>!: <tipo>;
   id!: number;
 
   username!: string;
@@ -16,7 +14,6 @@ class Users extends Model {
 }
 
 Users.init({
-  // ... Campos
   id: {
     type: INTEGER,
     allowNull: false,
@@ -31,15 +28,18 @@ Users.init({
     type: STRING(255),
     allowNull: false,
   },
+  email: {
+    type: STRING(255),
+    allowNull: false,
+  },
   password: {
     type: STRING(255),
     allowNull: false,
   },
 }, {
-  // ... Outras configs
   underscored: true,
   sequelize: db,
-  // modelName: 'example',
+  modelName: 'Users',
   timestamps: false,
 });
 /**
