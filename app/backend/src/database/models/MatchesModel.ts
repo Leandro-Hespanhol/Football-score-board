@@ -47,14 +47,11 @@ Matches.init({
 }, {
   underscored: true,
   sequelize: db,
-  modelName: 'Matches',
+  // modelName: 'Matches',
   timestamps: false,
 });
 
 TeamsModel.belongsTo(Matches, { foreignKey: 'homeTeam', as: 'id' });
 TeamsModel.belongsTo(Matches, { foreignKey: 'awayTeam', as: 'id' });
-
-Matches.hasMany(TeamsModel, { foreignKey: 'id', as: 'homeTeam' });
-Matches.hasMany(TeamsModel, { foreignKey: 'id', as: 'awayTeam' });
 
 export default Matches;
