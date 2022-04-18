@@ -4,6 +4,7 @@
   "description": "",
   "main": "./build/server",
   "scripts": {
+    "bcryptjs": "^2.4.3",
     "build": "/bin/sh tsc_eval.sh",
     "test": "mocha -r ts-node/register ./src/tests/*$NAME*.{test,spec}.ts -t 10000 --exit",
     "test:coverage": "nyc npm run test",
@@ -51,6 +52,7 @@
     "typescript": "4.4.4"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "dotenv": "10.0.0",
     "express": "4.17.1",

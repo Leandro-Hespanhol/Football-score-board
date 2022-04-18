@@ -11,6 +11,7 @@ export default class UsersController {
 
   public async login(req: Request, res: Response) {
     const { email, password } = req.body;
+    console.log(email, password)
     const user = await this.service.validadeLogin({ email, password });
     if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
