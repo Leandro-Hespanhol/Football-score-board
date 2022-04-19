@@ -17,13 +17,4 @@ export default class UsersService {
       token,
     };
   }
-
-  // public async getRole(email: string): Promise<string | null> {
-  //   const userLogin = await this.model.findOne({ where: { email } });
-  //   console.log('USERSERVICE 23', userLogin?.role);
-
-  //   if (!userLogin?.role) return null;
-
-  //   return userLogin?.role;
-  // }
 }
