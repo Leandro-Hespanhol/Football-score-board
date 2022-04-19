@@ -10,9 +10,15 @@ const userController = new UsersController();
 router.post(
   '/',
   loginValidation,
-  TokenValidation,
   async (req, res) =>
     userController.login(req, res),
+);
+
+router.get(
+  '/validate',
+  TokenValidation,
+  async (req, res) =>
+    UsersController.getRole(req, res),
 );
 
 export default router;

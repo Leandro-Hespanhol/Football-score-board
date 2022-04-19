@@ -11,6 +11,13 @@ interface ILogin {
   password: string;
 }
 
+interface ILoginToken {
+  id: number;
+  username: string;
+  role: string;
+  email: string;
+}
+
 interface ILoginSucess {
   user: {
     id: number;
@@ -24,5 +31,6 @@ interface ILoginSucess {
 export {
   IUserTable,
   ILogin,
+  ILoginToken,
   ILoginSucess,
 };
