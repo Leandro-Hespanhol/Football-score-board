@@ -15,6 +15,7 @@ export default class JwtAuth {
       expiresIn: '30d',
       algorithm: 'HS256',
     });
+    console.log('TOKEN AUTH LINHA 18', token);
 
     return token;
   }
