@@ -31,11 +31,11 @@ Matches.init({
     type: INTEGER,
     allowNull: false,
   },
-  awayteam: {
+  awayTeam: {
     type: INTEGER,
     allowNull: false,
   },
-  awayteamGoals: {
+  awayTeamGoals: {
     type: INTEGER,
     allowNull: false,
   },

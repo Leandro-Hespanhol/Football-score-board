@@ -9,7 +9,7 @@ export default class MatchesController {
   }
 
   public async getAll(_req: Request, res: Response) {
-    const allMatches = this.matches.getAll();
+    const allMatches = await this.matches.getAll();
 
     return res.status(200).json(allMatches);
   }
