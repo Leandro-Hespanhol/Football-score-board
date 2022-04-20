@@ -18,7 +18,7 @@ export default class MatchesService {
 
   public async findByProgress(param: string): Promise<IMatches[]> {
     const inProgress = await this.matchesModel
-      .findAll({ where: { inProgress: param === '0' ? '0' : '1' },
+      .findAll({ where: { inProgress: param === 'false' ? '0' : '1' },
         include:
           [{ model: Teams, as: 'teamHome', attributes: [['team_name', 'teamName']] },
             { model: Teams, as: 'teamAway', attributes: [['team_name', 'teamName']] }],

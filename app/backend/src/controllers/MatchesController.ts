@@ -8,19 +8,18 @@ export default class MatchesController {
     this.matches = new MatchesService();
   }
 
-  public async getAll(_req: Request, res: Response) {
+  public async getAll(req: Request, res: Response) {
+    const progress = req.query.inProgress;
+
+    if (progress !== undefined) {
+      const inProgress = progress.toString();
+      // console.log('CONTROLLER', inProgress);
+      const matches = await this.matches.findByProgress(inProgress);
+
+      return res.status(200).json(matches);
+    }
+
     const allMatches = await this.matches.getAll();
-
     return res.status(200).json(allMatches);
-  }
-
-  public async findByProgress(req: Request, res: Response) {
-    let progress = req.query.inProgress;
-    if (progress === undefined) progress = '0';
-    progress = progress.toString();
-
-    const matches = await this.matches.findByProgress(progress);
-
-    return res.status(200).json(matches);
   }
 }
