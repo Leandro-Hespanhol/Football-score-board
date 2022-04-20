@@ -13,4 +13,14 @@ export default class MatchesController {
 
     return res.status(200).json(allMatches);
   }
+
+  public async findByProgress(req: Request, res: Response) {
+    let progress = req.query.inProgress;
+    if (progress === undefined) progress = '0';
+    progress = progress.toString();
+
+    const matches = await this.matches.findByProgress(progress);
+
+    return res.status(200).json(matches);
+  }
 }

@@ -11,4 +11,10 @@ router.get(
     matchesController.getAll(req, res),
 );
 
+// router.get(
+//   '/inProgress/',
+//   async (req, res) =>
+//     matchesController.findByProgress(req, res),
+// );
+
 export default router;
