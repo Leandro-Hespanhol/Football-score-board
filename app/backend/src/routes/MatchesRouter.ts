@@ -1,5 +1,7 @@
 import { Router } from 'express';
+// import TokenValidation from '../middlewares/TokenValidation';
 import MatchesController from '../controllers/MatchesController';
+// import MatchesValidations from '../middlewares/MatchesValidations';
 
 const router = Router();
 
@@ -11,10 +13,12 @@ router.get(
     matchesController.getAll(req, res),
 );
 
-// router.get(
-//   '/inProgress/',
-//   async (req, res) =>
-//     matchesController.findByProgress(req, res),
-// );
+router.post(
+  '/',
+  // TokenValidation,
+  // MatchesValidations,
+  async (req, res) =>
+    matchesController.createMatch(req, res),
+);
 
 export default router;

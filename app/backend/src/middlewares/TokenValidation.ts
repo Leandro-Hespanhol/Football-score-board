@@ -10,8 +10,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
   try {
     const decode = jwt.verify(token, JWT_SECRET);
-
-    req.body.user = decode;
+    console.log('REQ BODY TOKEN VALID', req.body);
+    req.body = { ...req.body, decode };
 
     next();
   } catch (error) {

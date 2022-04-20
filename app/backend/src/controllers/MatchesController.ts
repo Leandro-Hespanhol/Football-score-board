@@ -13,7 +13,7 @@ export default class MatchesController {
 
     if (progress !== undefined) {
       const inProgress = progress.toString();
-      // console.log('CONTROLLER', inProgress);
+
       const matches = await this.matches.findByProgress(inProgress);
 
       return res.status(200).json(matches);
@@ -21,5 +21,14 @@ export default class MatchesController {
 
     const allMatches = await this.matches.getAll();
     return res.status(200).json(allMatches);
+  }
+
+  public async createMatch(req: Request, res: Response) {
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
+    console.log('REQ BODY CONTROLLER', req.body);
+    const newMatch = await this.matches
+      .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals });
+
+    res.status(200).json(newMatch);
   }
 }

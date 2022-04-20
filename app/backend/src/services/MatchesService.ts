@@ -1,6 +1,6 @@
 import Teams from '../database/models/TeamsModel';
 import Matches from '../database/models/MatchesModel';
-import IMatches from '../interfaces/IMatches';
+import { IMatches, IMatchesCreate } from '../interfaces/IMatches';
 
 export default class MatchesService {
   private matchesModel = Matches;
@@ -25,5 +25,13 @@ export default class MatchesService {
       });
 
     return inProgress;
+  }
+
+  public async createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals }: IMatchesCreate) {
+    const newMatch = await this.matchesModel
+      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
+    console.log('MATCHES SERVICE', newMatch);
+
+    return newMatch;
   }
 }
