@@ -24,10 +24,10 @@ export default class MatchesController {
   }
 
   public async createMatch(req: Request, res: Response) {
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
     console.log('REQ BODY CONTROLLER', req.body);
     const newMatch = await this.matches
-      .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals });
+      .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
     res.status(200).json(newMatch);
   }

@@ -27,9 +27,10 @@ export default class MatchesService {
     return inProgress;
   }
 
-  public async createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals }: IMatchesCreate) {
+  public async createMatch({ homeTeam, awayTeam, homeTeamGoals,
+    awayTeamGoals, inProgress = true }: IMatchesCreate) {
     const newMatch = await this.matchesModel
-      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
+      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
     console.log('MATCHES SERVICE', newMatch);
 
     return newMatch;
