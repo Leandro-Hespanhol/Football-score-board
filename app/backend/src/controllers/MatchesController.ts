@@ -39,7 +39,7 @@ export default class MatchesController {
     const { id } = req.params;
 
     const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
-    if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
+    // if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
 
     return res.status(200).json(updatedMatch);
   }
@@ -48,7 +48,7 @@ export default class MatchesController {
     const { id } = req.params;
 
     const finishMatch = await this.matches.finishMatch({ id });
-    if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
+    // if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
     return res.status(200).json(finishMatch);
   }
 }
