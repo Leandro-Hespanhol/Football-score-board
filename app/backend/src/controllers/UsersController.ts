@@ -19,6 +19,6 @@ export default class UsersController {
   }
 
   static async getRole(req: Request, res: Response) {
-    return res.status(200).json({ message: req.body.user.role });
+    return res.status(200).json(req.body.user.role);
   }
 }

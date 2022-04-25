@@ -32,6 +32,10 @@ export default class MatchesService {
 
   public async createMatch({ homeTeam, awayTeam, homeTeamGoals,
     awayTeamGoals, inProgress = '1' }: IMatchesCreate) {
+    if (homeTeam === awayTeam) {
+      return 'Equal teams';
+    }
+
     const homeTeamExistance = await this.teamsModel.findOne({ where: { id: Number(homeTeam) } });
     const awayTeamExistance = await this.teamsModel.findOne({ where: { id: Number(awayTeam) } });
 

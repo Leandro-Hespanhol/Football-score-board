@@ -30,6 +30,10 @@ export default class MatchesController {
       .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
     if (!newMatch) return res.status(404).json({ message: 'Team not found' });
+    if (newMatch === 'Equal teams') {
+      return res.status(401)
+        .json({ message: 'It is not possible to create a match with two equal teams' });
+    }
 
     res.status(200).json(newMatch);
   }

@@ -11,7 +11,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const decode = jwt.verify(token, JWT_SECRET);
     console.log('REQ BODY TOKEN VALID', req.body);
-    req.body = { ...req.body, decode };
+    req.body.user = decode;
 
     next();
   } catch (error) {
