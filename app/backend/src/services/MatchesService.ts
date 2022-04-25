@@ -62,7 +62,6 @@ export default class MatchesService {
       { where: { id } },
     );
     const updated = await this.matchesModel.findOne({ where: { id } });
-    console.log('MATCHES SERVICE', updated);
     if (!updated) return null;
 
     return updated;
