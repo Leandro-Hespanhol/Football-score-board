@@ -37,11 +37,17 @@ export default class MatchesController {
   public async editMatch(req: Request, res: Response) {
     const { homeTeamGoals, awayTeamGoals } = req.body;
     const { id } = req.params;
-    console.log(id, homeTeamGoals, awayTeamGoals);
 
     const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
     console.log('CONTROLLER', updatedMatch);
 
     return res.status(200).json(updatedMatch);
+  }
+
+  public async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const finishMatch = await this.matches.finishMatch({ id });
+    return res.status(200).json(finishMatch);
   }
 }

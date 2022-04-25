@@ -21,8 +21,13 @@ interface IMatchesPatchGoals {
   awayTeamGoals: string,
 }
 
+interface IMatchesFinish {
+  id: string,
+}
+
 export {
   IMatches,
   IMatchesCreate,
   IMatchesPatchGoals,
+  IMatchesFinish,
 };

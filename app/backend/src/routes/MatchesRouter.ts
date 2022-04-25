@@ -27,4 +27,10 @@ router.patch(
     matchesController.editMatch(req, res),
 );
 
+router.patch(
+  '/:id/finish',
+  async (req, res) =>
+    matchesController.finishMatch(req, res),
+);
+
 export default router;
