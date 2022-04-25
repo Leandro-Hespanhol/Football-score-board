@@ -29,6 +29,8 @@ export default class MatchesController {
     const newMatch = await this.matches
       .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
+    if (!newMatch) return res.status(401).json({ message: 'Team not found' });
+
     res.status(200).json(newMatch);
   }
 }

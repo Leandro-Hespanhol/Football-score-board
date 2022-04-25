@@ -5,6 +5,8 @@ import { IMatches, IMatchesCreate } from '../interfaces/IMatches';
 export default class MatchesService {
   private matchesModel = Matches;
 
+  private teamsModel = Teams;
+
   public async getAll(): Promise<IMatches[]> {
     const matches = await this.matchesModel
       .findAll({
@@ -29,6 +31,12 @@ export default class MatchesService {
 
   public async createMatch({ homeTeam, awayTeam, homeTeamGoals,
     awayTeamGoals, inProgress = true }: IMatchesCreate) {
+    const homeTeamExistance = await this.teamsModel.findOne({ where: { id: Number(homeTeam) } });
+    const awayTeamExistance = await this.teamsModel.findOne({ where: { id: Number(awayTeam) } });
+
+    if (!homeTeamExistance || !awayTeamExistance) {
+      return null;
+    }
     const newMatch = await this.matchesModel
       .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
     console.log('MATCHES SERVICE', newMatch);
