@@ -10,10 +10,8 @@ export default class MatchesController {
 
   public async getAll(req: Request, res: Response) {
     const progress = req.query.inProgress;
-
     if (progress !== undefined) {
       const inProgress = progress.toString();
-
       const matches = await this.matches.findByProgress(inProgress);
 
       return res.status(200).json(matches);
@@ -25,15 +23,15 @@ export default class MatchesController {
 
   public async createMatch(req: Request, res: Response) {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
-    console.log('REQ BODY CONTROLLER', req.body);
+
     const newMatch = await this.matches
       .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
-    if (!newMatch) return res.status(404).json({ message: 'Team not found' });
-    if (newMatch === 'Equal teams') {
-      return res.status(401)
-        .json({ message: 'It is not possible to create a match with two equal teams' });
-    }
+    if (!newMatch) return res.status(404).json({ message: 'There is no team with such id!' });
+    // if (newMatch === 'Equal teams') {
+    //   return res.status(401)
+    //     .json({ message: 'It is not possible to create a match with two equal teams' });
+    // }
 
     res.status(200).json(newMatch);
   }
@@ -43,7 +41,7 @@ export default class MatchesController {
     const { id } = req.params;
 
     const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
-    // if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
+    if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
 
     return res.status(200).json(updatedMatch);
   }
@@ -52,7 +50,7 @@ export default class MatchesController {
     const { id } = req.params;
 
     const finishMatch = await this.matches.finishMatch({ id });
-    // if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
+    if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
     return res.status(200).json(finishMatch);
   }
 }
