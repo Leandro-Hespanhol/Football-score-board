@@ -29,8 +29,19 @@ export default class MatchesController {
     const newMatch = await this.matches
       .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
-    if (!newMatch) return res.status(401).json({ message: 'Team not found' });
+    if (!newMatch) return res.status(404).json({ message: 'Team not found' });
 
     res.status(200).json(newMatch);
+  }
+
+  public async editMatch(req: Request, res: Response) {
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { id } = req.params;
+    console.log(id, homeTeamGoals, awayTeamGoals);
+
+    const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
+    console.log('CONTROLLER', updatedMatch);
+
+    return res.status(200).json(updatedMatch);
   }
 }

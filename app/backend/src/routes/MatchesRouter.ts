@@ -21,4 +21,10 @@ router.post(
     matchesController.createMatch(req, res),
 );
 
+router.patch(
+  '/:id',
+  async (req, res) =>
+    matchesController.editMatch(req, res),
+);
+
 export default router;

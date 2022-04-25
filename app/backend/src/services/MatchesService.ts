@@ -1,6 +1,6 @@
 import Teams from '../database/models/TeamsModel';
 import Matches from '../database/models/MatchesModel';
-import { IMatches, IMatchesCreate } from '../interfaces/IMatches';
+import { IMatches, IMatchesCreate, IMatchesPatchGoals } from '../interfaces/IMatches';
 
 export default class MatchesService {
   private matchesModel = Matches;
@@ -42,5 +42,17 @@ export default class MatchesService {
     console.log('MATCHES SERVICE', newMatch);
 
     return newMatch;
+  }
+
+  public async editMatch({ id, homeTeamGoals, awayTeamGoals }:IMatchesPatchGoals) {
+    await this.matchesModel.update(
+      { homeTeamGoals: Number(homeTeamGoals), awayTeamGoals: Number(awayTeamGoals) },
+      { where: { id: Number(id) } },
+    );
+    const updated = await this.matchesModel.findOne({ where: { id, inProgress: true } });
+    console.log('MATCHES SERVICE', updated);
+    if (!updated) return null;
+
+    return updated;
   }
 }

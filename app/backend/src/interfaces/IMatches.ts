@@ -15,7 +15,14 @@ interface IMatchesCreate {
   inProgress?: boolean,
 }
 
+interface IMatchesPatchGoals {
+  id: string,
+  homeTeamGoals: string,
+  awayTeamGoals: string,
+}
+
 export {
   IMatches,
   IMatchesCreate,
+  IMatchesPatchGoals,
 };
