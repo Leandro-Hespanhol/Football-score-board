@@ -34,40 +34,52 @@ export default class LeaderBoard {
     return teamsTable;
   }
 
-  // public async generalBoardUpdate(team1, team2) {
-
-  // }
-
-  public async getScore() {
-    // attempt 3
-    // const teams = await this.teamsModel.findAll();
-    // const playing = teams.map(async (team) => (
-    //   (await (this.matchesModel))
-    //     .findAll({ where: { inProgress: false, homeTeam: team.id } })
-    // ));
-
+  private async homeWinner() {
     const endedMatches = await this.matchesModel
       .findAll({ where: { inProgress: false } });
 
     endedMatches.forEach(async (match) => {
       if (match.homeTeamGoals > match.awayTeamGoals) {
-        // attempt 2
-        // (await (this._leaderBoard))
-        //   .find((winner) => match.homeTeam === winner.id)
-        //   .totalVictories += 1;
-        // // attempt 1
-        // console.log(match.homeTeam);
-        const victories = (await (this._leaderBoard))
+        const victoryReward = (await (this._leaderBoard))
           .find((winner) => match.homeTeam === winner.id);
-          // .reduce((acc, curr) => curr.totalVictories + 1, 0);
-        if (!victories) return null;
-        victories.totalVictories += 1;
-        // console.log('team', victories);
-        return [this._leaderBoard, victories];
+        if (!victoryReward) return null;
+        victoryReward.totalVictories += 1;
+        victoryReward.totalGames += 1;
+        victoryReward.totalPoints += 3;
       }
-      return this._leaderBoard;
+      const loserPenalty = (await (this._leaderBoard))
+        .find((loser) => match.awayTeam === loser.id);
+      if (!loserPenalty) return null;
+      loserPenalty.totalLosses += 1;
     });
-    // console.log(this._leaderBoard);
+  }
+
+  private async awayWinner() {
+    const endedMatches = await this.matchesModel
+      .findAll({ where: { inProgress: false } });
+
+    endedMatches.forEach(async (match) => {
+      if (match.homeTeamGoals < match.awayTeamGoals) {
+        const victoryReward = (await (this._leaderBoard))
+          .find((winner) => match.awayTeam === winner.id);
+        if (!victoryReward) return null;
+        victoryReward.totalVictories += 1;
+        victoryReward.totalGames += 1;
+        victoryReward.totalPoints += 3;
+
+        const loserPenalty = (await (this._leaderBoard))
+          .find((loser) => match.homeTeam === loser.id);
+        if (!loserPenalty) return null;
+        loserPenalty.totalLosses += 1;
+      }
+    });
+  }
+
+  public async getScore() {
+    this._leaderBoard = this.mountTeamsTable();
+    await this.homeWinner();
+    await this.awayWinner();
+
     return this._leaderBoard;
   }
 }
