@@ -55,6 +55,7 @@ export default class LeaderBoard {
         drawHomeTeam.totalDraws += 1;
         drawHomeTeam.totalGames += 1;
         drawHomeTeam.totalPoints += 1;
+        drawHomeTeam.goalsBalance = (drawHomeTeam.goalsFavor - drawHomeTeam.goasOwn);
       }
     });
   }
@@ -73,6 +74,7 @@ export default class LeaderBoard {
         drawAwayTeam.totalDraws += 1;
         drawAwayTeam.totalGames += 1;
         drawAwayTeam.totalPoints += 1;
+        drawAwayTeam.goalsBalance = (drawAwayTeam.goalsFavor - drawAwayTeam.goasOwn);
       }
     });
   }
@@ -147,6 +149,22 @@ export default class LeaderBoard {
     });
   }
 
+  private async efficiency() {
+    const finishedMatches = await this.matchesModel
+      .findAll({ where: { inProgress: false } });
+
+    finishedMatches.forEach(async () => {
+      const teamStatistics = (await (this._leaderBoard))
+        .find((elem) => elem);
+      // console.log(teamStatistics);
+      if (!teamStatistics) return null;
+      teamStatistics.efficiency = (
+        (teamStatistics.totalPoints / (teamStatistics.totalGames * 3)) * 100);
+      console.log(teamStatistics);
+      return teamStatistics.efficiency.toFixed(2);
+    });
+  }
+
   public async getScore() {
     this._leaderBoard = this.mountTeamsTable();
     await this.homeWinner();
@@ -155,6 +173,7 @@ export default class LeaderBoard {
     await this.awayLoser();
     await this.drawHomeMatch();
     await this.drawAwayMatch();
+    await this.efficiency();
 
     (await this._leaderBoard).forEach((elem) => {
       const toDelete = elem;
