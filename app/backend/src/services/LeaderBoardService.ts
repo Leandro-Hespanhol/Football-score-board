@@ -1,6 +1,7 @@
 import Teams from '../database/models/TeamsModel';
 import Matches from '../database/models/MatchesModel';
 import ILeaderBoard from '../interfaces/ILeaderBoard';
+// import { IMatches } from '../interfaces/IMatches';
 
 export default class LeaderBoard {
   private matchesModel = Matches;
@@ -9,9 +10,10 @@ export default class LeaderBoard {
 
   protected _leaderBoard: Promise<ILeaderBoard[]>;
 
-  private _victories: number;
+  // protected _endedMatches: Promise<IMatches[]>;
 
   constructor() {
+    // this._endedMatches = this.endedMatches;
     this._leaderBoard = this.mountTeamsTable();
   }
 
@@ -34,11 +36,39 @@ export default class LeaderBoard {
     return teamsTable;
   }
 
-  private async homeWinner() {
-    const endedMatches = await this.matchesModel
+  // private async endedMatches() {
+  //   return this.matchesModel
+  //     .findAll({ where: { inProgress: false } });
+  // }
+
+  private async drawMatch() {
+    const finishedMatches = await this.matchesModel
       .findAll({ where: { inProgress: false } });
 
-    endedMatches.forEach(async (match) => {
+    finishedMatches.forEach(async (match) => {
+      if (match.homeTeamGoals === match.awayTeamGoals) {
+        const drawHomeTeam = (await (this._leaderBoard))
+          .find((homeTeam) => match.homeTeam === homeTeam.id);
+        if (!drawHomeTeam) return null;
+        drawHomeTeam.totalDraws += 1;
+        drawHomeTeam.totalGames += 1;
+        drawHomeTeam.totalPoints += 1;
+
+        const drawAwayTeam = (await (this._leaderBoard))
+          .find((awayTeam) => match.awayTeam === awayTeam.id);
+        if (!drawAwayTeam) return null;
+        drawAwayTeam.totalDraws += 1;
+        drawAwayTeam.totalGames += 1;
+        drawAwayTeam.totalPoints += 1;
+      }
+    });
+  }
+
+  private async homeWinner() {
+    const finishedMatches = await this.matchesModel
+      .findAll({ where: { inProgress: false } });
+
+    finishedMatches.forEach(async (match) => {
       if (match.homeTeamGoals > match.awayTeamGoals) {
         const victoryReward = (await (this._leaderBoard))
           .find((winner) => match.homeTeam === winner.id);
@@ -51,14 +81,15 @@ export default class LeaderBoard {
         .find((loser) => match.awayTeam === loser.id);
       if (!loserPenalty) return null;
       loserPenalty.totalLosses += 1;
+      loserPenalty.totalGames += 1;
     });
   }
 
   private async awayWinner() {
-    const endedMatches = await this.matchesModel
+    const finishedMatches = await this.matchesModel
       .findAll({ where: { inProgress: false } });
 
-    endedMatches.forEach(async (match) => {
+    finishedMatches.forEach(async (match) => {
       if (match.homeTeamGoals < match.awayTeamGoals) {
         const victoryReward = (await (this._leaderBoard))
           .find((winner) => match.awayTeam === winner.id);
@@ -71,6 +102,7 @@ export default class LeaderBoard {
           .find((loser) => match.homeTeam === loser.id);
         if (!loserPenalty) return null;
         loserPenalty.totalLosses += 1;
+        loserPenalty.totalGames += 1;
       }
     });
   }
@@ -79,6 +111,7 @@ export default class LeaderBoard {
     this._leaderBoard = this.mountTeamsTable();
     await this.homeWinner();
     await this.awayWinner();
+    await this.drawMatch();
 
     return this._leaderBoard;
   }
