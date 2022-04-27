@@ -12,7 +12,7 @@ interface IMatchesCreate {
   awayTeam: number,
   homeTeamGoals: number,
   awayTeamGoals: number,
-  inProgress?: number,
+  inProgress: number,
 }
 
 interface IMatchesPatchGoals {

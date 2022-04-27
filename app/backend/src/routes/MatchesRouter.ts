@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import { MatchesController } from '../controllers';
 import TokenValidation from '../middlewares/TokenValidation';
-import MatchesController from '../controllers/MatchesController';
-import MatchesValidations from '../middlewares/MatchesValidations';
+// import MatchesValidations from '../middlewares/MatchesValidations';
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.get(
 router.post(
   '/',
   TokenValidation,
-  MatchesValidations,
+  // MatchesValidations,
   async (req, res) =>
     matchesController.createMatch(req, res),
 );

@@ -1,13 +1,20 @@
+import cors = require('cors');
 import * as express from 'express';
+// import { MatchesController } from './controllers';
+// import TokenValidation from './middlewares/TokenValidation';
 import routes from './routes';
+
+// const matchesController = new MatchesController();
 
 class App {
   public app: express.Express;
 
   constructor() {
     this.app = express();
+    this.app.use(cors());
     this.config();
     this.app.use(routes);
+    // this.app.post('/matches', TokenValidation, matchesController.createMatch);
   }
 
   private config():void {
@@ -20,6 +27,7 @@ class App {
 
     this.app.use(accessControl);
     this.app.use(express.json());
+    this.app.use(cors());
   }
 
   public start(PORT: string | number):void {

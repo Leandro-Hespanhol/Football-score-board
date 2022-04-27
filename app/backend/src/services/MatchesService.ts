@@ -32,20 +32,26 @@ export default class MatchesService {
 
   public async createMatch({ homeTeam, awayTeam, homeTeamGoals,
     awayTeamGoals, inProgress = 1 }: IMatchesCreate) {
-    if (homeTeam === awayTeam) {
-      return 'Equal teams';
-    }
+    console.log('SERVICE CREATE HOMETEAM', homeTeam);
+    console.log('SERVICE CREATE AWAYTEAM', awayTeam);
+    try {
+      if (homeTeam === awayTeam) {
+        return 'Equal teams';
+      }
+      const newMatch = await this.matchesModel
+        .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
-    const homeTeamExistance = await this.teamsModel.findOne({ where: { id: Number(homeTeam) } });
-    const awayTeamExistance = await this.teamsModel.findOne({ where: { id: Number(awayTeam) } });
-
-    if (!homeTeamExistance || !awayTeamExistance) {
+      return newMatch;
+    } catch (e) {
       return null;
     }
-    const newMatch = await this.matchesModel
-      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
 
-    return newMatch;
+    // const homeTeamExistance = await this.teamsModel.findOne({ where: { id: Number(homeTeam) } });
+    // const awayTeamExistance = await this.teamsModel.findOne({ where: { id: Number(awayTeam) } });
+
+    // if (!homeTeamExistance || !awayTeamExistance) {
+    //   return null;
+    // }
   }
 
   public async editMatch({ id, homeTeamGoals, awayTeamGoals }:IMatchesPatchGoals) {
