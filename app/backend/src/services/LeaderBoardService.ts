@@ -28,7 +28,7 @@ export default class LeaderBoard {
       totalDraws: 0,
       totalLosses: 0,
       goalsFavor: 0,
-      goasOwn: 0,
+      goalsOwn: 0,
       goalsBalance: 0,
       efficiency: 0,
     }
@@ -40,6 +40,17 @@ export default class LeaderBoard {
   //   return this.matchesModel
   //     .findAll({ where: { inProgress: false } });
   // }
+  private async goalsBalance() {
+    const finishedMatches = await this.matchesModel
+      .findAll({ where: { inProgress: false } });
+
+    finishedMatches.forEach(async (match) => {
+      const teams = (await (this._leaderBoard))
+        .find((team) => match.homeTeam === team.id);
+      if (!teams) return null;
+      teams.goalsBalance = (teams.goalsFavor - teams.goalsOwn);
+    });
+  }
 
   private async drawHomeMatch() {
     const finishedMatches = await this.matchesModel
@@ -51,11 +62,10 @@ export default class LeaderBoard {
           .find((homeTeam) => match.homeTeam === homeTeam.id);
         if (!drawHomeTeam) return null;
         drawHomeTeam.goalsFavor += match.homeTeamGoals;
-        drawHomeTeam.goasOwn += match.awayTeamGoals;
+        drawHomeTeam.goalsOwn += match.awayTeamGoals;
         drawHomeTeam.totalDraws += 1;
         drawHomeTeam.totalGames += 1;
         drawHomeTeam.totalPoints += 1;
-        drawHomeTeam.goalsBalance = (drawHomeTeam.goalsFavor - drawHomeTeam.goasOwn);
       }
     });
   }
@@ -70,11 +80,10 @@ export default class LeaderBoard {
           .find((awayTeam) => match.awayTeam === awayTeam.id);
         if (!drawAwayTeam) return null;
         drawAwayTeam.goalsFavor += match.awayTeamGoals;
-        drawAwayTeam.goasOwn += match.homeTeamGoals;
+        drawAwayTeam.goalsOwn += match.homeTeamGoals;
         drawAwayTeam.totalDraws += 1;
         drawAwayTeam.totalGames += 1;
         drawAwayTeam.totalPoints += 1;
-        drawAwayTeam.goalsBalance = (drawAwayTeam.goalsFavor - drawAwayTeam.goasOwn);
       }
     });
   }
@@ -89,7 +98,7 @@ export default class LeaderBoard {
           .find((winner) => match.homeTeam === winner.id);
         if (!victoryResults) return null;
         victoryResults.goalsFavor += match.homeTeamGoals;
-        victoryResults.goasOwn += match.awayTeamGoals;
+        victoryResults.goalsOwn += match.awayTeamGoals;
         victoryResults.totalVictories += 1;
         victoryResults.totalGames += 1;
         victoryResults.totalPoints += 3;
@@ -109,7 +118,7 @@ export default class LeaderBoard {
         loserResults.totalLosses += 1;
         loserResults.totalGames += 1;
         loserResults.goalsFavor += match.homeTeamGoals;
-        loserResults.goasOwn += match.awayTeamGoals;
+        loserResults.goalsOwn += match.awayTeamGoals;
       }
     });
   }
@@ -123,8 +132,8 @@ export default class LeaderBoard {
         const victoryReward = (await (this._leaderBoard))
           .find((winner) => match.awayTeam === winner.id);
         if (!victoryReward) return null;
-        victoryReward.goalsFavor += match.homeTeamGoals;
-        victoryReward.goasOwn += match.awayTeamGoals;
+        victoryReward.goalsFavor += match.awayTeamGoals;
+        victoryReward.goalsOwn += match.homeTeamGoals;
         victoryReward.totalVictories += 1;
         victoryReward.totalGames += 1;
         victoryReward.totalPoints += 3;
@@ -144,7 +153,7 @@ export default class LeaderBoard {
         loserResults.totalLosses += 1;
         loserResults.totalGames += 1;
         loserResults.goalsFavor += match.awayTeamGoals;
-        loserResults.goasOwn += match.homeTeamGoals;
+        loserResults.goalsOwn += match.homeTeamGoals;
       }
     });
   }
@@ -176,6 +185,7 @@ export default class LeaderBoard {
     await this.awayLoser();
     await this.drawHomeMatch();
     await this.drawAwayMatch();
+    await this.goalsBalance();
     await this.efficiency();
 
     (await this._leaderBoard).forEach((elem) => {
