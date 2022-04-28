@@ -153,15 +153,18 @@ export default class LeaderBoard {
     const finishedMatches = await this.matchesModel
       .findAll({ where: { inProgress: false } });
 
-    finishedMatches.forEach(async () => {
+    finishedMatches.forEach(async (match) => {
       const teamStatistics = (await (this._leaderBoard))
-        .find((elem) => elem);
-      // console.log(teamStatistics);
+        .find((elem) => elem.id === match.homeTeam);
+
       if (!teamStatistics) return null;
-      teamStatistics.efficiency = (
+      if (teamStatistics.totalVictories === 0) {
+        teamStatistics.efficiency = 0;
+        return null;
+      }
+      const operation = (
         (teamStatistics.totalPoints / (teamStatistics.totalGames * 3)) * 100);
-      console.log(teamStatistics);
-      return teamStatistics.efficiency.toFixed(2);
+      teamStatistics.efficiency = +(operation.toFixed(2));
     });
   }
 
