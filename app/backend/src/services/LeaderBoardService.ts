@@ -15,6 +15,7 @@ export default class LeaderBoard {
   constructor() {
     // this._endedMatches = this.endedMatches;
     this._leaderBoard = this.mountTeamsTable();
+    this.getScore();
   }
 
   public async mountTeamsTable() {
@@ -167,13 +168,13 @@ export default class LeaderBoard {
         .find((elem) => elem.id === match.homeTeam);
 
       if (!teamStatistics) return null;
-      if (teamStatistics.totalVictories === 0) {
-        teamStatistics.efficiency = 0;
-        return null;
-      }
+      // if (teamStatistics.totalVictories === 0) {
+      //   teamStatistics.efficiency = 0;
+      //   return null;
+      // }
       const operation = (
         (teamStatistics.totalPoints / (teamStatistics.totalGames * 3)) * 100);
-      teamStatistics.efficiency = +(operation.toFixed(2));
+      teamStatistics.efficiency = Number(operation.toFixed(2));
     });
   }
 
@@ -192,6 +193,8 @@ export default class LeaderBoard {
       const toDelete = elem;
       delete toDelete.id;
     });
-    return (await this._leaderBoard).splice(1);
+    (await this._leaderBoard);
   }
+
+  get leaderBoard() { return this._leaderBoard; }
 }

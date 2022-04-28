@@ -2,27 +2,28 @@ import { Request, Response } from 'express';
 import { LeaderBoardService } from '../services';
 
 export default class LeaderBoardController {
-  private leaderBoard: LeaderBoardService;
+  private LB: LeaderBoardService;
 
   constructor() {
-    this.leaderBoard = new LeaderBoardService();
+    this.LB = new LeaderBoardService();
   }
 
   public async getAll(_req: Request, res: Response) {
-    const leaderBoard = await this.leaderBoard.getScore();
-    const sorted = leaderBoard.sort((a, b) => b.totalVictories - a.totalVictories)
+    // const leaderBoard = await this.leaderBoard.leaderBoard;
+    const sorted = (await this.LB.leaderBoard).sort((a, b) => b.totalVictories - a.totalVictories)
       .sort((a, b) => {
-        if (a.goalsBalance === b.goalsBalance) {
+        if (a.totalVictories === b.totalVictories) {
           return b.goalsBalance - a.goalsBalance;
         } return 1;
       })
       .sort((a, b) => {
-        if (a.goalsFavor === b.goalsFavor) {
+        if ((a.goalsBalance === b.goalsBalance) && (a.totalVictories === b.totalVictories)) {
           return b.goalsFavor - a.goalsFavor;
         } return 1;
       })
       .sort((a, b) => {
-        if (a.goalsOwn === b.goalsOwn) {
+        if ((a.goalsBalance === b.goalsBalance) && (a.goalsFavor === b.goalsFavor)
+        && (a.totalVictories === b.totalVictories)) {
           return b.goalsOwn - a.goalsOwn;
         } return 1;
       });
