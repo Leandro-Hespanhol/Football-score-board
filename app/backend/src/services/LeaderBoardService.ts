@@ -7,17 +7,11 @@ export default class LeaderBoard {
 
   private teamsModel = Teams;
 
-  protected _leaderBoard: Promise<ILeaderBoard[]>;
+  protected _leaderBoard: ILeaderBoard[];
 
-  protected _homeLeaderBoard: Promise<ILeaderBoard[]>;
+  protected _homeLeaderBoard: ILeaderBoard[];
 
-  protected _awayLeaderBoard: Promise<ILeaderBoard[]>;
-
-  constructor() {
-    this._leaderBoard = this.mountTeamsTable();
-    this._homeLeaderBoard = this.mountTeamsTable();
-    this._awayLeaderBoard = this.mountTeamsTable();
-  }
+  protected _awayLeaderBoard: ILeaderBoard[];
 
   public async mountTeamsTable() {
     const teams = await this.teamsModel.findAll();
@@ -42,20 +36,19 @@ export default class LeaderBoard {
     return this.matchesModel.findAll({ where: { inProgress: false } });
   }
 
-  private async goalsBalance(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async goalsBalance(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
-      const teams = (await (leaderBoard))
+      const teams = ((leaderBoard))
         .find((team) => match.homeTeam === team.id);
       if (!teams) return null;
       teams.goalsBalance = (teams.goalsFavor - teams.goalsOwn);
-      console.log(teams.name, teams.goalsBalance);
     });
   }
 
-  private async drawHomeMatch(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async drawHomeMatch(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals === match.awayTeamGoals) {
-        const drawHomeTeam = (await (leaderBoard))
+        const drawHomeTeam = ((leaderBoard))
           .find((homeTeam) => match.homeTeam === homeTeam.id);
         if (!drawHomeTeam) return null;
         drawHomeTeam.goalsFavor += match.homeTeamGoals;
@@ -67,10 +60,10 @@ export default class LeaderBoard {
     });
   }
 
-  private async drawAwayMatch(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async drawAwayMatch(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals === match.awayTeamGoals) {
-        const drawAwayTeam = (await (leaderBoard))
+        const drawAwayTeam = ((leaderBoard))
           .find((awayTeam) => match.awayTeam === awayTeam.id);
         if (!drawAwayTeam) return null;
         drawAwayTeam.goalsFavor += match.awayTeamGoals;
@@ -82,10 +75,10 @@ export default class LeaderBoard {
     });
   }
 
-  private async homeWinner(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async homeWinner(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals > match.awayTeamGoals) {
-        const victoryResults = (await (leaderBoard))
+        const victoryResults = ((leaderBoard))
           .find((winner) => match.homeTeam === winner.id);
         if (!victoryResults) return null;
         victoryResults.goalsFavor += match.homeTeamGoals;
@@ -97,10 +90,10 @@ export default class LeaderBoard {
     });
   }
 
-  private async homeLoser(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async homeLoser(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals < match.awayTeamGoals) {
-        const lossResults = (await (leaderBoard))
+        const lossResults = ((leaderBoard))
           .find((loser) => match.homeTeam === loser.id);
         if (!lossResults) return null;
         lossResults.totalLosses += 1;
@@ -111,10 +104,10 @@ export default class LeaderBoard {
     });
   }
 
-  private async awayWinner(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async awayWinner(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals < match.awayTeamGoals) {
-        const victoryReward = (await (leaderBoard))
+        const victoryReward = ((leaderBoard))
           .find((winner) => match.awayTeam === winner.id);
         if (!victoryReward) return null;
         victoryReward.goalsFavor += match.awayTeamGoals;
@@ -126,10 +119,10 @@ export default class LeaderBoard {
     });
   }
 
-  private async awayLoser(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async awayLoser(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
       if (match.homeTeamGoals > match.awayTeamGoals) {
-        const lossResults = (await (leaderBoard))
+        const lossResults = ((leaderBoard))
           .find((loser) => match.awayTeam === loser.id);
         if (!lossResults) return null;
         lossResults.totalLosses += 1;
@@ -140,9 +133,9 @@ export default class LeaderBoard {
     });
   }
 
-  private async efficiency(leaderBoard: Promise<ILeaderBoard[]>) {
+  private async efficiency(leaderBoard: ILeaderBoard[]) {
     (await this.endedMatches()).forEach(async (match) => {
-      const teamStatistics = (await (leaderBoard))
+      const teamStatistics = ((leaderBoard))
         .find((elem) => elem.id === match.homeTeam);
 
       if (!teamStatistics) return null;
@@ -153,8 +146,8 @@ export default class LeaderBoard {
     });
   }
 
-  static async sortLeaderBoard(leaderBoard: Promise<ILeaderBoard[]>) {
-    (await leaderBoard).sort((a, b) => b.totalPoints - a.totalPoints)
+  static sortLeaderBoard(leaderBoard: ILeaderBoard[]) {
+    (leaderBoard).sort((a, b) => b.totalPoints - a.totalPoints)
       .sort((a, b) => {
         if (a.totalPoints === b.totalPoints) {
           return b.totalVictories - a.totalVictories;
@@ -171,8 +164,8 @@ export default class LeaderBoard {
       });
   }
 
-  static async sortLeaderBoardTwo(leaderBoard: Promise<ILeaderBoard[]>) {
-    (await leaderBoard).sort((a, b) => {
+  static sortLeaderBoardTwo(leaderBoard: ILeaderBoard[]) {
+    (leaderBoard).sort((a, b) => {
       if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)
         && (a.goalsBalance === b.goalsBalance) && (a.goalsFavor === b.goalsFavor)) {
         return b.goalsOwn - a.goalsOwn;
@@ -181,26 +174,27 @@ export default class LeaderBoard {
   }
 
   private async resetTables() {
-    this._awayLeaderBoard = this.mountTeamsTable();
-    this._homeLeaderBoard = this.mountTeamsTable();
-    this._leaderBoard = this.mountTeamsTable();
+    const boards = await this.mountTeamsTable();
+    this._awayLeaderBoard = boards;
+    this._homeLeaderBoard = boards;
+    this._leaderBoard = boards;
   }
 
   public async getScore() {
     await this.resetTables();
     await Promise.all([
-      await this.homeWinner(this._leaderBoard),
-      await this.homeLoser(this._leaderBoard),
-      await this.awayWinner(this._leaderBoard),
-      await this.awayLoser(this._leaderBoard),
-      await this.drawHomeMatch(this._leaderBoard),
-      await this.drawAwayMatch(this._leaderBoard),
-      await this.goalsBalance(this._leaderBoard),
-      await this.efficiency(this._leaderBoard),
+      this.homeWinner(this._leaderBoard),
+      this.homeLoser(this._leaderBoard),
+      this.awayWinner(this._leaderBoard),
+      this.awayLoser(this._leaderBoard),
+      this.drawHomeMatch(this._leaderBoard),
+      this.drawAwayMatch(this._leaderBoard),
     ]);
-    await LeaderBoard.sortLeaderBoard(this._leaderBoard);
-    await LeaderBoard.sortLeaderBoardTwo(this._leaderBoard);
-    (await this._leaderBoard).forEach((elem) => {
+    await this.goalsBalance(this._leaderBoard);
+    await this.efficiency(this._leaderBoard);
+    LeaderBoard.sortLeaderBoard(this._leaderBoard);
+    LeaderBoard.sortLeaderBoardTwo(this._leaderBoard);
+    (this._leaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
     });
@@ -210,15 +204,15 @@ export default class LeaderBoard {
   public async getHomeScore() {
     await this.resetTables();
     await Promise.all([
-      await this.homeWinner(this._homeLeaderBoard),
-      await this.homeLoser(this._homeLeaderBoard),
-      await this.drawHomeMatch(this._homeLeaderBoard),
-      await this.goalsBalance(this._homeLeaderBoard),
-      await this.efficiency(this._homeLeaderBoard),
+      this.homeWinner(this._homeLeaderBoard),
+      this.homeLoser(this._homeLeaderBoard),
+      this.drawHomeMatch(this._homeLeaderBoard),
     ]);
-    await LeaderBoard.sortLeaderBoard(this._homeLeaderBoard);
-    await LeaderBoard.sortLeaderBoardTwo(this._homeLeaderBoard);
-    (await this._homeLeaderBoard).forEach((elem) => {
+    await this.goalsBalance(this._homeLeaderBoard);
+    await this.efficiency(this._homeLeaderBoard);
+    LeaderBoard.sortLeaderBoard(this._homeLeaderBoard);
+    LeaderBoard.sortLeaderBoardTwo(this._homeLeaderBoard);
+    (this._homeLeaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
     });
@@ -228,15 +222,15 @@ export default class LeaderBoard {
   public async getAwayScore() {
     await this.resetTables();
     await Promise.all([
-      await this.awayWinner(this._awayLeaderBoard),
-      await this.awayLoser(this._awayLeaderBoard),
-      await this.drawAwayMatch(this._awayLeaderBoard),
-      await this.goalsBalance(this._awayLeaderBoard),
-      await this.efficiency(this._awayLeaderBoard),
+      this.awayWinner(this._awayLeaderBoard),
+      this.awayLoser(this._awayLeaderBoard),
+      this.drawAwayMatch(this._awayLeaderBoard),
     ]);
-    await LeaderBoard.sortLeaderBoard(this._awayLeaderBoard);
-    await LeaderBoard.sortLeaderBoardTwo(this._awayLeaderBoard);
-    (await this._awayLeaderBoard).forEach((elem) => {
+    await this.goalsBalance(this._awayLeaderBoard);
+    await this.efficiency(this._awayLeaderBoard);
+    LeaderBoard.sortLeaderBoard(this._awayLeaderBoard);
+    LeaderBoard.sortLeaderBoardTwo(this._awayLeaderBoard);
+    (this._awayLeaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
     });
