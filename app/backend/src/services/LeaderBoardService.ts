@@ -178,6 +178,33 @@ export default class LeaderBoard {
     });
   }
 
+  public async sortLeaderBoard() {
+    (await this._leaderBoard).sort((a, b) => b.totalPoints - a.totalPoints)
+      .sort((a, b) => {
+        if (a.totalPoints === b.totalPoints) {
+          return b.totalVictories - a.totalVictories;
+        } return 1;
+      }).sort((a, b) => {
+        if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)) {
+          return b.goalsBalance - a.goalsBalance;
+        } return 1;
+      }).sort((a, b) => {
+        if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)
+        && (a.goalsBalance === b.goalsBalance)) {
+          return b.goalsFavor - a.goalsFavor;
+        } return 1;
+      });
+  }
+
+  public async sortLeaderBoardTwo() {
+    (await this._leaderBoard).sort((a, b) => {
+      if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)
+        && (a.goalsBalance === b.goalsBalance) && (a.goalsFavor === b.goalsFavor)) {
+        return b.goalsOwn - a.goalsOwn;
+      } return 1;
+    });
+  }
+
   public async getScore() {
     this._leaderBoard = this.mountTeamsTable();
     await this.homeWinner();
@@ -188,6 +215,8 @@ export default class LeaderBoard {
     await this.drawAwayMatch();
     await this.goalsBalance();
     await this.efficiency();
+    await this.sortLeaderBoard();
+    await this.sortLeaderBoardTwo();
 
     (await this._leaderBoard).forEach((elem) => {
       const toDelete = elem;
@@ -196,5 +225,7 @@ export default class LeaderBoard {
     (await this._leaderBoard);
   }
 
-  get leaderBoard() { return this._leaderBoard; }
+  get leaderBoard() {
+    return this._leaderBoard;
+  }
 }
