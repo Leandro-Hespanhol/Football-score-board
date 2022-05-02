@@ -49,15 +49,11 @@ describe(getRequirement(23), () => {
     const [matchInserted] = normalize([lastInsert(rows)])
 
     expect(matchInserted).toStrictEqual(newBody);
-    // console.log('LINHA52 TEST', matchInserted)
     const showMatchesButton = await page.$(header.showMatchesButton);
     await showMatchesButton.click();
     await page.waitForTimeout(puppeteerDefs.pause.brief);
-    // console.log('SHOWMATCHES TEST', showMatchesButton)
     const homeTeam = await page.$eval(pageMatches.homeTeam(49), (el) => el.innerText);
     const awayTeam = await page.$eval(pageMatches.awayTeam(49), (el) => el.innerText);
-    // console.log('TESTES INSERT', homeTeam);
-    // console.log('TESTES INSERT', awayTeam);
     expect(homeTeam).toBe(teams[3].teamName);
     expect(awayTeam).toBe(teams[8].teamName);
   });

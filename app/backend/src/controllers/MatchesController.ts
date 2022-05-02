@@ -22,18 +22,19 @@ export default class MatchesController {
   }
 
   public async createMatch(req: Request, res: Response) {
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
-    // console.log('REQ BODY CREATE MATCH', req.body);
+    // const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
+    const match = req.body;
+    console.log('REQ BODY CREATE MATCH', match);
     const newMatch = await this.matches
-      .createMatch({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
+      .createMatch(match);
     // console.log('controller', newMatch);
     if (!newMatch) return res.status(404).json({ message: 'There is no team with such id!' });
-    if (newMatch === 'Equal teams') {
+    if (newMatch === 'Equal Teams') {
       return res.status(401)
         .json({ message: 'It is not possible to create a match with two equal teams' });
     }
 
-    res.status(200).json(newMatch);
+    res.status(201).json(newMatch);
   }
 
   public async editMatch(req: Request, res: Response) {
