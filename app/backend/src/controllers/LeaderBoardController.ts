@@ -10,18 +10,16 @@ export default class LeaderBoardController {
 
   public async getAll(_req: Request, res: Response) {
     // const leaderBoard = await this.leaderBoard.leaderBoard;
-    const sorted = (await this.LB.leaderBoard).sort((a, b) => b.totalVictories - a.totalVictories)
+    const sorted = (await this.LB.leaderBoard).sort((a, b) => b.totalPoints - a.totalPoints)
       .sort((a, b) => {
-        if (a.totalVictories === b.totalVictories) {
+        if (a.totalPoints === b.totalPoints) {
           return b.goalsBalance - a.goalsBalance;
         } return 1;
-      })
-      .sort((a, b) => {
+      }).sort((a, b) => {
         if ((a.goalsBalance === b.goalsBalance) && (a.totalVictories === b.totalVictories)) {
           return b.goalsFavor - a.goalsFavor;
         } return 1;
-      })
-      .sort((a, b) => {
+      }).sort((a, b) => {
         if ((a.goalsBalance === b.goalsBalance) && (a.goalsFavor === b.goalsFavor)
         && (a.totalVictories === b.totalVictories)) {
           return b.goalsOwn - a.goalsOwn;
