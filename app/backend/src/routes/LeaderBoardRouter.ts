@@ -11,4 +11,16 @@ router.get(
     leaderBoard.getAll(req, res),
 );
 
+router.get(
+  '/home',
+  async (req, res) =>
+    leaderBoard.getHomeLeaderBoard(req, res),
+);
+
+router.get(
+  '/away',
+  async (req, res) =>
+    leaderBoard.getAwayLeaderBoard(req, res),
+);
+
 export default router;
