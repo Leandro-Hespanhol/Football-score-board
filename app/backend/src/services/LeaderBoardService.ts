@@ -17,9 +17,6 @@ export default class LeaderBoard {
     this._leaderBoard = this.mountTeamsTable();
     this._homeLeaderBoard = this.mountTeamsTable();
     this._awayLeaderBoard = this.mountTeamsTable();
-    // this.getScore();
-    // this.getHomeScore();
-    // this.getHomeScore();
   }
 
   public async mountTeamsTable() {
@@ -51,6 +48,7 @@ export default class LeaderBoard {
         .find((team) => match.homeTeam === team.id);
       if (!teams) return null;
       teams.goalsBalance = (teams.goalsFavor - teams.goalsOwn);
+      console.log(teams.name, teams.goalsBalance);
     });
   }
 
@@ -182,19 +180,26 @@ export default class LeaderBoard {
     });
   }
 
+  private async resetTables() {
+    this._awayLeaderBoard = this.mountTeamsTable();
+    this._homeLeaderBoard = this.mountTeamsTable();
+    this._leaderBoard = this.mountTeamsTable();
+  }
+
   public async getScore() {
-    this._leaderBoard = this.mountTeamsTable(); // Reseta valores antes de calcular
-    await this.homeWinner(this._leaderBoard);
-    await this.homeLoser(this._leaderBoard);
-    await this.awayWinner(this._leaderBoard);
-    await this.awayLoser(this._leaderBoard);
-    await this.drawHomeMatch(this._leaderBoard);
-    await this.drawAwayMatch(this._leaderBoard);
-    await this.goalsBalance(this._leaderBoard);
-    await this.efficiency(this._leaderBoard);
+    await this.resetTables();
+    await Promise.all([
+      await this.homeWinner(this._leaderBoard),
+      await this.homeLoser(this._leaderBoard),
+      await this.awayWinner(this._leaderBoard),
+      await this.awayLoser(this._leaderBoard),
+      await this.drawHomeMatch(this._leaderBoard),
+      await this.drawAwayMatch(this._leaderBoard),
+      await this.goalsBalance(this._leaderBoard),
+      await this.efficiency(this._leaderBoard),
+    ]);
     await LeaderBoard.sortLeaderBoard(this._leaderBoard);
     await LeaderBoard.sortLeaderBoardTwo(this._leaderBoard);
-
     (await this._leaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
@@ -203,12 +208,14 @@ export default class LeaderBoard {
   }
 
   public async getHomeScore() {
-    this._homeLeaderBoard = this.mountTeamsTable();
-    await this.homeWinner(this._homeLeaderBoard);
-    await this.homeLoser(this._homeLeaderBoard);
-    await this.drawHomeMatch(this._homeLeaderBoard);
-    await this.goalsBalance(this._homeLeaderBoard);
-    await this.efficiency(this._homeLeaderBoard);
+    await this.resetTables();
+    await Promise.all([
+      await this.homeWinner(this._homeLeaderBoard),
+      await this.homeLoser(this._homeLeaderBoard),
+      await this.drawHomeMatch(this._homeLeaderBoard),
+      await this.goalsBalance(this._homeLeaderBoard),
+      await this.efficiency(this._homeLeaderBoard),
+    ]);
     await LeaderBoard.sortLeaderBoard(this._homeLeaderBoard);
     await LeaderBoard.sortLeaderBoardTwo(this._homeLeaderBoard);
     (await this._homeLeaderBoard).forEach((elem) => {
@@ -219,12 +226,14 @@ export default class LeaderBoard {
   }
 
   public async getAwayScore() {
-    this._awayLeaderBoard = this.mountTeamsTable();
-    await this.awayWinner(this._awayLeaderBoard);
-    await this.awayLoser(this._awayLeaderBoard);
-    await this.drawAwayMatch(this._awayLeaderBoard);
-    await this.goalsBalance(this._awayLeaderBoard);
-    await this.efficiency(this._awayLeaderBoard);
+    await this.resetTables();
+    await Promise.all([
+      await this.awayWinner(this._awayLeaderBoard),
+      await this.awayLoser(this._awayLeaderBoard),
+      await this.drawAwayMatch(this._awayLeaderBoard),
+      await this.goalsBalance(this._awayLeaderBoard),
+      await this.efficiency(this._awayLeaderBoard),
+    ]);
     await LeaderBoard.sortLeaderBoard(this._awayLeaderBoard);
     await LeaderBoard.sortLeaderBoardTwo(this._awayLeaderBoard);
     (await this._awayLeaderBoard).forEach((elem) => {

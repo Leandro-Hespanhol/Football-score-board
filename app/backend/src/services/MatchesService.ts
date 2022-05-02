@@ -31,10 +31,6 @@ export default class MatchesService {
   }
 
   public async createMatch(match: IMatchesCreate) {
-    // { homeTeam, awayTeam, homeTeamGoals,
-    //   awayTeamGoals, inProgress = 1 }
-    // console.log('SERVICE CREATE HOMETEAM', homeTeam);
-    // console.log('SERVICE CREATE AWAYTEAM', awayTeam);
     try {
       const { homeTeam, awayTeam } = match;
       if (homeTeam && awayTeam && (homeTeam === awayTeam)) {
@@ -55,7 +51,6 @@ export default class MatchesService {
       { where: { id: Number(id) } },
     );
     const updated = await this.matchesModel.findOne({ where: { id, inProgress: 1 } });
-    console.log('MATCHES SERVICE', updated);
     if (!updated) return null;
 
     return updated;

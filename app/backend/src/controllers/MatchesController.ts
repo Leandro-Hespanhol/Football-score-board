@@ -24,7 +24,7 @@ export default class MatchesController {
   public async createMatch(req: Request, res: Response) {
     // const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
     const match = req.body;
-    console.log('REQ BODY CREATE MATCH', match);
+    // console.log('REQ BODY CREATE MATCH', match);
     const newMatch = await this.matches
       .createMatch(match);
     // console.log('controller', newMatch);
