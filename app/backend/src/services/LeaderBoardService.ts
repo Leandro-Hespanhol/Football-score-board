@@ -13,6 +13,12 @@ export default class LeaderBoard {
 
   protected _awayLeaderBoard: ILeaderBoard[];
 
+  constructor() {
+    this.getScore();
+    this.getHomeScore();
+    this.getAwayScore();
+  }
+
   public async mountTeamsTable() {
     const teams = await this.teamsModel.findAll();
     const teamsTable = teams.map((team) => ({
@@ -173,21 +179,15 @@ export default class LeaderBoard {
     });
   }
 
-  private async resetTables() {
-    const boards = await this.mountTeamsTable();
-    this._awayLeaderBoard = boards;
-    this._homeLeaderBoard = boards;
-    this._leaderBoard = boards;
-  }
-
   public async getScore() {
-    await this.resetTables();
+    // await this.resetTables();
+    this._leaderBoard = await this.mountTeamsTable();
     await Promise.all([
       this.homeWinner(this._leaderBoard),
       this.homeLoser(this._leaderBoard),
+      this.drawHomeMatch(this._leaderBoard),
       this.awayWinner(this._leaderBoard),
       this.awayLoser(this._leaderBoard),
-      this.drawHomeMatch(this._leaderBoard),
       this.drawAwayMatch(this._leaderBoard),
     ]);
     await this.goalsBalance(this._leaderBoard);
@@ -202,7 +202,7 @@ export default class LeaderBoard {
   }
 
   public async getHomeScore() {
-    await this.resetTables();
+    this._homeLeaderBoard = await this.mountTeamsTable();
     await Promise.all([
       this.homeWinner(this._homeLeaderBoard),
       this.homeLoser(this._homeLeaderBoard),
@@ -220,10 +220,9 @@ export default class LeaderBoard {
   }
 
   public async getAwayScore() {
-    await this.resetTables();
+    this._awayLeaderBoard = await this.mountTeamsTable();
     await Promise.all([
-      this.awayWinner(this._awayLeaderBoard),
-      this.awayLoser(this._awayLeaderBoard),
+      this.awayWinner(this._awayLeaderBoard), this.awayLoser(this._awayLeaderBoard),
       this.drawAwayMatch(this._awayLeaderBoard),
     ]);
     await this.goalsBalance(this._awayLeaderBoard);
