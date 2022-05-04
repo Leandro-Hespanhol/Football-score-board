@@ -152,35 +152,15 @@ export default class LeaderBoard {
     });
   }
 
-  static sortLeaderBoard(leaderBoard: ILeaderBoard[]) {
-    (leaderBoard).sort((a, b) => b.totalPoints - a.totalPoints)
-      .sort((a, b) => {
-        if (a.totalPoints === b.totalPoints) {
-          return b.totalVictories - a.totalVictories;
-        } return 1;
-      }).sort((a, b) => {
-        if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)) {
-          return b.goalsBalance - a.goalsBalance;
-        } return 1;
-      }).sort((a, b) => {
-        if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)
-        && (a.goalsBalance === b.goalsBalance)) {
-          return b.goalsFavor - a.goalsFavor;
-        } return 1;
-      });
-  }
-
-  static sortLeaderBoardTwo(leaderBoard: ILeaderBoard[]) {
-    (leaderBoard).sort((a, b) => {
-      if ((a.totalPoints === b.totalPoints) && (a.totalVictories === b.totalVictories)
-        && (a.goalsBalance === b.goalsBalance) && (a.goalsFavor === b.goalsFavor)) {
-        return b.goalsOwn - a.goalsOwn;
-      } return 1;
-    });
+  static sortLeaderBoardUnique(leaderBoard: ILeaderBoard[]) {
+    leaderBoard.sort((a, b) => b.goalsOwn - a.goalsOwn)
+      .sort((a, b) => b.goalsFavor - a.goalsFavor)
+      .sort((a, b) => b.goalsBalance - a.goalsBalance)
+      .sort((a, b) => b.totalVictories - a.totalVictories)
+      .sort((a, b) => b.totalPoints - a.totalPoints);
   }
 
   public async getScore() {
-    // await this.resetTables();
     this._leaderBoard = await this.mountTeamsTable();
     await Promise.all([
       this.homeWinner(this._leaderBoard),
@@ -192,8 +172,7 @@ export default class LeaderBoard {
     ]);
     await this.goalsBalance(this._leaderBoard);
     await this.efficiency(this._leaderBoard);
-    LeaderBoard.sortLeaderBoard(this._leaderBoard);
-    LeaderBoard.sortLeaderBoardTwo(this._leaderBoard);
+    LeaderBoard.sortLeaderBoardUnique(this._leaderBoard);
     (this._leaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
@@ -210,8 +189,7 @@ export default class LeaderBoard {
     ]);
     await this.goalsBalance(this._homeLeaderBoard);
     await this.efficiency(this._homeLeaderBoard);
-    LeaderBoard.sortLeaderBoard(this._homeLeaderBoard);
-    LeaderBoard.sortLeaderBoardTwo(this._homeLeaderBoard);
+    LeaderBoard.sortLeaderBoardUnique(this._homeLeaderBoard);
     (this._homeLeaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
@@ -227,8 +205,7 @@ export default class LeaderBoard {
     ]);
     await this.goalsBalance(this._awayLeaderBoard);
     await this.efficiency(this._awayLeaderBoard);
-    LeaderBoard.sortLeaderBoard(this._awayLeaderBoard);
-    LeaderBoard.sortLeaderBoardTwo(this._awayLeaderBoard);
+    LeaderBoard.sortLeaderBoardUnique(this._awayLeaderBoard);
     (this._awayLeaderBoard).forEach((elem) => {
       const toDelete = elem;
       delete toDelete.id;
