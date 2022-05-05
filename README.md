@@ -38,7 +38,7 @@ Your database, backend and frontend should be mounted and connected through dock
 # Once mounted, you should see the application at:
 localhost:3000
 
-## Core abilities: NodeJS, Sequelize, OOP, API-Rest
+## Core abilities: NodeJS, Sequelize, OOP, API-Rest, Mocha-chai
 
 ## Description: 
 
