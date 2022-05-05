@@ -1,7 +1,5 @@
 <h1 align="center">⚽ Welcome to the Football Score Board Project ⚽</h1>
 
-### ✨ [Demo](https://leandro-hespanhol.github.io/StarWars-Planet-Search/)
-
 ## Requirements
 ```
 Docker version 20.10.14
