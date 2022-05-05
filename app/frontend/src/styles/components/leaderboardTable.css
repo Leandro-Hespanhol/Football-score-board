@@ -1,4 +1,5 @@
 .score-board-table-section {
+  background-color: #2aa6a8;
   display: flex;
   justify-content: center;
   min-width: max-content;
@@ -38,7 +39,7 @@
 }
 
 .score-board-team-name {
-  background: #036b52;
+  background: #0d6d6d;;
   border-radius: 8px;
   color: white;
   font-family: Verdana , Tahoma , sans-serif;
