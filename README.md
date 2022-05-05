@@ -27,6 +27,7 @@ npm install
 ```sh
 /app/backend
 npm run nodemon
+```
 
 ```sh
 /app/frontend
