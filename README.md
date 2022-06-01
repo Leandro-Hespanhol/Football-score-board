@@ -12,6 +12,8 @@ Npm version 8.1.2
 - This project is configured to use ports 3000 (front-end), 3001(back-end) and 3002 (database), so they need to be available on your computer or changed on the project.
 
 # .env File
+
+- Here is an example of my env files needed to run the project.
 ## My backend .env file looks like this:
 ```
 PORT=3004
