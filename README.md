@@ -10,6 +10,22 @@ Npm version 8.1.2
 
 ## Install and Usage 
 - This project is configured to use ports 3000 (front-end), 3001(back-end) and 3002 (database), so they need to be available on your computer or changed on the project.
+
+## .env File
+# My backend .env file looks like this:
+```
+PORT=3004
+DB_USER=root
+DB_PASS=******
+DB_NAME=TRYBE_FUTEBOL_CLUBE
+DB_HOST=localhost
+DB_PORT=3306
+```
+# My frontend .env file looks like this
+```
+SKIP_PREFLIGHT_CHECK=true
+```
+
 # Run on root directory:
 ```sh
 npm run compose:down
