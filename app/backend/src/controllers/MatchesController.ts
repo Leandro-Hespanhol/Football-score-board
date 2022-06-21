@@ -22,12 +22,11 @@ export default class MatchesController {
   }
 
   public async createMatch(req: Request, res: Response) {
-    // const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
     const match = req.body;
-    // console.log('REQ BODY CREATE MATCH', match);
+
     const newMatch = await this.matches
       .createMatch(match);
-    // console.log('controller', newMatch);
+
     if (!newMatch) return res.status(404).json({ message: 'There is no team with such id!' });
     if (newMatch === 'Equal Teams') {
       return res.status(401)
@@ -40,18 +39,25 @@ export default class MatchesController {
   public async editMatch(req: Request, res: Response) {
     const { homeTeamGoals, awayTeamGoals } = req.body;
     const { id } = req.params;
+    try {
+      const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
 
-    const updatedMatch = await this.matches.editMatch({ id, homeTeamGoals, awayTeamGoals });
-    if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
+      if (!updatedMatch) res.status(400).json({ message: 'Something wrong happened' });
 
-    return res.status(200).json(updatedMatch);
+      return res.status(200).json(updatedMatch);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   public async finishMatch(req: Request, res: Response) {
     const { id } = req.params;
-
-    const finishMatch = await this.matches.finishMatch({ id });
-    if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
-    return res.status(200).json(finishMatch);
+    try {
+      const finishMatch = await this.matches.finishMatch({ id });
+      if (!finishMatch) res.status(400).json({ message: 'Something wrong happened' });
+      return res.status(200).json(finishMatch);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
